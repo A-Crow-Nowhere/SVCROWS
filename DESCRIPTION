@@ -1,0 +1,11 @@
+Package: SVCROWS
+Type: Package
+Title: SVCROWS: A User Defined Tool for Delineating Biologically Significant Structural Variants in Challenging Datasets
+Version: 0.1.0
+Author: Noah Brown, Charlie Danis, Varia Ahmedjannova
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: Structural variants (SVs) are large rearrangements of the genome of an organism that are prevalent critical organism phenotypes and human diseases. There are several tools for defining unique SVs across different datasets, however, most fail to delineate SVs in a region that constitute significant biological differences. Further, these tools lack user options to tailor the stringency in those calls specifically for the genomic background of the study organism. Here we present a user-friendly R-based program, SVCROWS, that provides users options to produce meaningfully different calls based on reciprocal overlap dependent on SV size. Further, this program optionally uses break point matching between SVs as a second piece of information to determine if SVs are the same. These, along with other features make SVCROWS a versatile and malleable tool for categorizing SVs.
+License: Guler Malaria Lab
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
