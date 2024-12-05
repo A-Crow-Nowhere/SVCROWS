@@ -7,6 +7,7 @@
 Scavenge(
   InputQueryList,
   OutputDirectory,
+  ExpandRORegion = FALSE,
   BPfactor = TRUE,
   DefaultSizes = FALSE,
   xs = NA,
@@ -21,6 +22,8 @@ Scavenge(
 \item{InputQueryList}{Query List in the designated format (see user manual)}
 
 \item{OutputDirectory}{Directory to write output files (see user manual)}
+
+\item{ExpandRORegion}{If TRUE, When entries match, use the minimum and maximum breakpoints of either to define a new region (which will be used for all future comparisons). When FALSE, original bounds are kept}
 
 \item{BPfactor}{Boolean. By Default TRUE, uses breakpoints as a secondary piece of information to call RO overlapping regions. Regardless, matching regions will be counted in the FCL.}
 
@@ -42,6 +45,6 @@ Scavenge(
 #' @description This is the main function of SVCROWS. This is a program uses reciprocal overlap (RO) to determine if two regions have a significant level of overlap. This program allows for user input to determine the stringency of the comparisons, while also giving options to use other pieces of evidence to support RO calls. In principle, the program uses the concept of "Weighted Sizes" to weight RO stringency.
 }
 \examples{
-Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", TRUE, FALSE, 5000, 25000, 500, 2500, 50, 80)
-Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", TRUE, TRUE)
+Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", FALSE, TRUE, FALSE, 5000, 25000, 500, 2500, 50, 80)
+Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", TRUE, TRUE, TRUE)
 }

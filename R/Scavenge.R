@@ -167,7 +167,7 @@ CreateOQL <- function(QL)
 ##Part 2: Main Loop
 # Handles List iteration, calls other functions as relevant. Returns the final
 # consensus list and the per-sample list.
-SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor)
+SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, ExpandRORegion)
 {
 
   WorkingCon <<- ConsensusListX
@@ -245,7 +245,7 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor)
         filter(
           Chr == qChr,
           Type == qType,
-          #Var3 == qV3, # Optional conditions for list matching cna be applied
+         # !Var3 == qV3, # Optional conditions for list matching cna be applied
           #Var2 != qV2, #
           #nothing ouside of these bounds are relevant to search
           BPEndRight >= (qStart - y1LargeBound),
@@ -257,7 +257,7 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor)
         filter(
           Chr != qChr |
             Type != qType |
-            #Var3 != qV3 | # Optional conditions for list matching cna be applied
+            #Var3 == qV3 | # Optional conditions for list matching cna be applied
             #Var2 == qV2 | # Still must be inverses of the previous block^
             BPEndRight < (qStart - y1LargeBound) |
             BPStartLeft > (qEnd + y1LargeBound)
@@ -390,19 +390,61 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor)
                               qLength, rID, rReads, rScore, qReads, qScore, ConsensusPosition, FALSE)
 
 
+
+            if(ExpandRORegion && ROPass)
+            {
+              if((abs(rowIn$Crow$Start[1]) > abs(qStart)) || (abs(rowIn$Crow$End[1]) < abs(qEnd)))
+              {
+                if(abs(rowIn$Crow$Start[1]) > abs(qStart))
+                {
+                  rowIn$Crow$Start[1] <- abs(qStart)
+                }
+                if(abs(rowIn$Crow$End[1]) < abs(qEnd))
+                {
+                  rowIn$Crow$End[1] <- abs(qEnd)
+                }
+                stringIn <- rowIn$Crow$Matches[1]
+                StringOut <- sub("^(.*):", "\\1+", stringIn)
+                rowIn$Crow$Matches[1] <- StringOut
+
+
+                rowIn$Crow$Length[1] <- (rowIn$Crow$End[1] - rowIn$Crow$Start[1])
+                newLength <- rowIn$Crow$Length[1]
+                if (abs(newLength) <= xSmallSVL)
+                {
+                  rowIn$Crow$Size[1] <- "Small"
+                  Sizes <- SizeDetermination(xSmallSVL)
+                }
+                else if (abs(newLength) <= xLargeSVL)
+                {
+                  rowIn$Crow$Size[1] <- "Medium"
+                  Sizes <- SizeDetermination(newLength)
+                }
+                else
+                {
+                  rowIn$Crow$Size[1] <- "Large"
+                  Sizes <- SizeDetermination(xLargeSVL)
+                }
+
+                rowIn$Crow$BPStartLeft[1] <- round(rowIn$Crow$Start[1] - (Sizes[1]/2))
+                rowIn$Crow$BPStartRight[1] <- round(rowIn$Crow$Start[1] + (Sizes[1]/2))
+
+                rowIn$Crow$BPEndLeft[1] <- round(rowIn$Crow$End[1] - (Sizes[1]/2))
+                rowIn$Crow$BPEndRight[1] <- round(rowIn$Crow$End[1] + (Sizes[1]/2))
+
+                rowIn$Crow$BPBoundSize[1] <- Sizes[1]
+                rowIn$Crow$ROPercentPass[1] <- Sizes[2]
+              }
+            }
+
+
             #If a match is found in the query, update the CL and PSL
             if ((BPStartPass || BPEndPass || ROPass))
             {
-              #print(ConsensusPosition)
-              #print("here")
-              # print(ROPass)
-
               #Update rows based on results of decision
               tempWorkC <- MatchList
               tempWorkC[ConsensusPosition,] <- rowIn$Crow
               MatchList <<- tempWorkC
-
-              #print(rowIn$Prow)
 
               tempPerSamp <- PerSampleList
               tempPerSamp[QueryPosition,] <- rowIn$Prow
@@ -421,7 +463,6 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor)
               {
                 tempPos <- ConsensusPosition
                 ConsensusPosition <<- (tempPos + 1)
-                #print("Not here")
               }
 
               #a breakpoint passed and it is the end of the CL, update and then add
@@ -890,7 +931,7 @@ FCLprocessing <- function(rFCLin)
   #aligns reference. Especially noticable with known CNVs.
   for(i in seq_len(nrow(rFCLin)))
   {
-    rFCLin$Frequency[i] <- (rFCLin$ROCount[i]/UniqueSamples)
+    rFCLin$Frequency[i] <- as.double((rFCLin$ROCount[i]/UniqueSamples))
   }
 
   for(i in seq_len(nrow(rFCLin)))
@@ -992,6 +1033,7 @@ AdjustPSL <- function(FPSLout)
 #'
 #' @param InputQueryList Query List in the designated format (see user manual)
 #' @param OutputDirectory Directory to write output files (see user manual)
+#' @param ExpandRORegion If TRUE, When entries match, use the minimum and maximum breakpoints of either to define a new region (which will be used for all future comparisons). When FALSE, original bounds are kept
 #' @param BPfactor Boolean. By Default TRUE, uses breakpoints as a secondary piece of information to call RO overlapping regions. Regardless, matching regions will be counted in the FCL.
 #' @param DefaultSizes Boolean. By default False, which uses the other 6 inputs given by the user. If set to True, SVCROWS will use the 2nd and 4th quartiles to generate values for the six variables (see user manual for details).
 #' @param xs Int. Small SV size cutoff
@@ -1003,9 +1045,9 @@ AdjustPSL <- function(FPSLout)
 #'
 #' @export
 #'
-#' @examples Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", TRUE, FALSE, 5000, 25000, 500, 2500, 50, 80)
-#' @examples Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", TRUE, TRUE)
-Scavenge <- function(InputQueryList, OutputDirectory, BPfactor = TRUE, DefaultSizes = FALSE,  xs = NA, xl = NA, y1s = NA, y1l = NA, y2s = NA, y2l = NA)
+#' @examples Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", FALSE, TRUE, FALSE, 5000, 25000, 500, 2500, 50, 80)
+#' @examples Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", TRUE, TRUE, TRUE)
+Scavenge <- function(InputQueryList, OutputDirectory, ExpandRORegion = FALSE, BPfactor = TRUE, DefaultSizes = FALSE,  xs = NA, xl = NA, y1s = NA, y1l = NA, y2s = NA, y2l = NA)
 {
 
   library(dplyr)
@@ -1047,7 +1089,7 @@ Scavenge <- function(InputQueryList, OutputDirectory, BPfactor = TRUE, DefaultSi
     filename <<- basename(file)
     first4 <<- substring(filename, 1, 20)
 
-    OutPuts <- RunScavenge(file, FeatureListIn, BPfactor)
+    OutPuts <- RunScavenge(file, FeatureListIn, BPfactor, ExpandRORegion)
 
     WriteScavenge(OutPuts, first4, OutputDirectory)
   }
@@ -1059,6 +1101,8 @@ WriteScavenge <- function(OutPuts, name, OutputDirectory)
   FinalPerSampleList <<- OutPuts$FPSL
   AdjustedFinalPerSampleList <<- OutPuts$AFPSL
   QueryList <<- OutPuts$QL
+
+  FinalConsensusList <- FinalConsensusList %>% rename(Abundance = Frequency)
 
 
   QLName <- paste0(OutputDirectory,"/",name,".scavenged.QL.tsv")
@@ -1081,13 +1125,13 @@ WriteScavenge <- function(OutPuts, name, OutputDirectory)
 ##Run Mode: Scavenge. This is for comparing SVs in the same list together, and
 ##devloping the Consensus list. Main funtion of SVCROWS.
 
-RunScavenge <- function(file, FeatureListIn, BPfactor)
+RunScavenge <- function(file, FeatureListIn, BPfactor, ExpandRORegion)
 {
 
   QueryListIn <- CreateQL(file)
   ConsensusListIn <- CreateCL()
   PerSampleIn <- CreateOQL(QueryListIn)
-  OP <- SVCrowsScavenge(QueryListIn, ConsensusListIn, PerSampleIn, BPfactor)
+  OP <- SVCrowsScavenge(QueryListIn, ConsensusListIn, PerSampleIn, BPfactor, ExpandRORegion)
   return(OP)
 }
 
