@@ -3,4 +3,5 @@
 export(ConcatSamples)
 export(ConsensusToQuery)
 export(Hunt)
+export(SVCSummarize)
 export(Scavenge)

@@ -395,6 +395,11 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
             {
               if((abs(rowIn$Crow$Start[1]) > abs(qStart)) || (abs(rowIn$Crow$End[1]) < abs(qEnd)))
               {
+                if (rowIn$Crow$Length[1] < 0)
+                {
+                  makeitnegative <- TRUE
+                }
+
                 if(abs(rowIn$Crow$Start[1]) > abs(qStart))
                 {
                   rowIn$Crow$Start[1] <- abs(qStart)
@@ -409,6 +414,12 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
 
 
                 rowIn$Crow$Length[1] <- (rowIn$Crow$End[1] - rowIn$Crow$Start[1])
+                if(makeitnegative)
+                {
+                  rowIn$Crow$Length[1] <- (rowIn$Crow$Length[1] * -1)
+                }
+
+
                 newLength <- rowIn$Crow$Length[1]
                 if (abs(newLength) <= xSmallSVL)
                 {
@@ -433,7 +444,6 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
                 rowIn$Crow$BPEndRight[1] <- round(rowIn$Crow$End[1] + (Sizes[1]/2))
 
                 rowIn$Crow$BPBoundSize[1] <- Sizes[1]
-                rowIn$Crow$ROPercentPass[1] <- Sizes[2]
               }
             }
 
@@ -1028,7 +1038,7 @@ AdjustPSL <- function(FPSLout)
 
 #' Run SVCROWS in "Scavenge" mode
 #'
-#'#' @description This is the main function of SVCROWS. This is a program uses reciprocal overlap (RO) to determine if two regions have a significant level of overlap. This program allows for user input to determine the stringency of the comparisons, while also giving options to use other pieces of evidence to support RO calls. In principle, the program uses the concept of "Weighted Sizes" to weight RO stringency.
+#' @description This is the main function of SVCROWS. This is a program uses reciprocal overlap (RO) to determine if two regions have a significant level of overlap. This program allows for user input to determine the stringency of the comparisons, while also giving options to use other pieces of evidence to support RO calls. In principle, the program uses the concept of "Weighted Sizes" to weight RO stringency.
 #'
 #'
 #' @param InputQueryList Query List in the designated format (see user manual)
@@ -1045,8 +1055,8 @@ AdjustPSL <- function(FPSLout)
 #'
 #' @export
 #'
-#' @examples Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", FALSE, TRUE, FALSE, 5000, 25000, 500, 2500, 50, 80)
-#' @examples Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", TRUE, TRUE, TRUE)
+#' @examples Scavenge("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", FALSE, TRUE, FALSE, 5000, 25000, 500, 2500, 50, 80)
+#' @examples Scavenge("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", TRUE, TRUE, TRUE)
 Scavenge <- function(InputQueryList, OutputDirectory, ExpandRORegion = FALSE, BPfactor = TRUE, DefaultSizes = FALSE,  xs = NA, xl = NA, y1s = NA, y1l = NA, y2s = NA, y2l = NA)
 {
 

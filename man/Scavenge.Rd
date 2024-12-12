@@ -42,9 +42,9 @@ Scavenge(
 \item{y2l}{Int. Small SV RO Threshold}
 }
 \description{
-#' @description This is the main function of SVCROWS. This is a program uses reciprocal overlap (RO) to determine if two regions have a significant level of overlap. This program allows for user input to determine the stringency of the comparisons, while also giving options to use other pieces of evidence to support RO calls. In principle, the program uses the concept of "Weighted Sizes" to weight RO stringency.
+This is the main function of SVCROWS. This is a program uses reciprocal overlap (RO) to determine if two regions have a significant level of overlap. This program allows for user input to determine the stringency of the comparisons, while also giving options to use other pieces of evidence to support RO calls. In principle, the program uses the concept of "Weighted Sizes" to weight RO stringency.
 }
 \examples{
-Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", FALSE, TRUE, FALSE, 5000, 25000, 500, 2500, 50, 80)
-Hunt("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", TRUE, TRUE, TRUE)
+Scavenge("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", FALSE, TRUE, FALSE, 5000, 25000, 500, 2500, 50, 80)
+Scavenge("~/user/R/SVCROWSin", "~/user/R/SVCROWSout", TRUE, TRUE, TRUE)
 }

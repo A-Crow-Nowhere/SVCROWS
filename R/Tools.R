@@ -132,3 +132,72 @@ ConcatSamples <- function(Indirectory, Outdirectory)
   name <- Outdirectory
   write_tsv(Biglist, file = name)
 }
+
+
+
+
+
+#' SVCSummarize
+#'
+#' @param OutputDirectory Directory where the output files are being written to from either Hunt() or Scavenge()
+#' @param OutputFile What the summary file will be written as
+#'
+#' @export
+#'
+#' @examples SVCSummarize("~/R/SVCROWS2/SVCROWSout", "~/R/SVCROWS2/SVCROWSout/summary.tsv")
+SVCSummarize <- function(OutputDirectory, OutputFile)
+{
+  # This code will loop through a folder containing all of your output files from multiple SVCROWS Scavenge runs and extract specific summary statistics from the Final Consensus Lists (FCLs).
+
+  #Creates a list of files from the folder that end in ".FCL.tsv"
+  file_list <- list.files(path = OutputDirectory, pattern = "\\.FCL\\.tsv$", full.names = TRUE)
+  # Create a data frame to store the data extracted from the FCLs.
+  results <- data.frame(FileName = character(),
+                        TotalRegions = integer(),
+                        MeanCNVSize = numeric(),
+                        MedianCNVSize = numeric(),
+                        CommonCNVFreq = numeric(),
+                        RareCNVFreq = numeric(),
+                        SmallCNVProportion = numeric(),
+                        MediumCNVProportion = numeric(),
+                        LargeCNVProportion = numeric(),
+                        DuplicationCount = integer(),
+                        DeletionCount = integer(),
+                        DecomplexityFactor = numeric(),
+                        stringsAsFactors = FALSE)
+  for (file in file_list)
+    {
+    data <- read.table(file, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+    #Mean and median of the (absolute value) CNV lengths.
+    mean_cnv_size <- mean(abs(data$Length), na.rm = TRUE)
+    median_cnv_size <- median(abs(data$Length), na.rm = TRUE)
+    #Optional summary statistics.
+    total_rows <- nrow(data)
+    common_cnv_freq <- sum(data$Rarity == "Common", na.rm = TRUE) / total_rows
+    rare_cnv_freq <- sum(data$Rarity %in% c("Unique", "Rare"), na.rm = TRUE) / total_rows
+    small_cnv_prop <- sum(data$Size == "Small", na.rm = TRUE) / total_rows
+    medium_cnv_prop <- sum(data$Size == "Medium", na.rm = TRUE) / total_rows
+    large_cnv_prop <- sum(data$Size == "Large", na.rm = TRUE) / total_rows
+    duplication_count <- sum(data$Type == "DUP", na.rm = TRUE)
+    deletion_count <- sum(data$Type == "DEL", na.rm = TRUE)
+    decomplexity_factor <- sum(data$ROCount, na.rm = TRUE) / total_rows
+
+     #Copies the results from the functions above into the dataframe
+    results <- rbind(results, data.frame(FileName = basename(file),
+                                         TotalRegions = total_rows,
+                                         MeanCNVSize = mean_cnv_size,
+                                         MedianCNVSize = median_cnv_size,
+                                         CommonCNVFreq = common_cnv_freq,
+                                         RareCNVFreq = rare_cnv_freq,
+                                         SmallCNVProportion = small_cnv_prop,
+                                         MediumCNVProportion = medium_cnv_prop,
+                                         LargeCNVProportion = large_cnv_prop,
+                                         DuplicationCount = duplication_count,
+                                         DeletionCount = deletion_count,
+                                         DecomplexityFactor = decomplexity_factor,
+                                         stringsAsFactors = FALSE))
+  }
+  #Creates a TSV with the resultant summary statistics.
+  write.table(results, OutputFile, sep = "\t", row.names = FALSE, quote = FALSE)
+  cat("Statistical analyses completed. Results saved to ", OutputDirectory, "\n")
+}
