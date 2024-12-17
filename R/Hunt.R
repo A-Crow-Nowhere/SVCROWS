@@ -31,7 +31,7 @@ CreateFL <- function(inputlist, xs, xl)
 {
   #Column Names for the Consensus list
   print("Generating Feature List...")
-  FL_columns <- c(
+  FL_columns <<- c(
     #General
     "Chr",
     "Start",
@@ -67,8 +67,8 @@ CreateFL <- function(inputlist, xs, xl)
     "Matches"
   )
   #Make Tibble with correct column names (i.e. the consensus list)
-  FLlist = data.frame(matrix(nrow = 0, ncol = length(FL_columns)))
-  colnames(FLlist) = FL_columns
+  FLlist <<- data.frame(matrix(nrow = 0, ncol = length(FL_columns)))
+  colnames(FLlist) <- FL_columns
 
   for(i in seq_len(nrow(inputlist)))
   {
@@ -79,7 +79,7 @@ CreateFL <- function(inputlist, xs, xl)
     FLlist$Chr[i] <- inputlist$Chr[i]
     FLlist$Start[i] <- inputlist$Start[i]
     FLlist$End[i] <- inputlist$End[i]
-    FLlist$Length[i] <- (FLlist$End[i] - FLlist$Start[i])
+    FLlist$Length[i] <- (inputlist$End[i] - inputlist$Start[i])
     FLlist$Type[i] <- inputlist$Type[i]
     FLlist$ID[i] <- i
     FLlist$Var1[i] <- inputlist$Var1[i]
@@ -362,7 +362,8 @@ Hunt <- function(InputQueryList, FeatureList, OutputDirectory, BPfactor = TRUE, 
   y2LargeOV <<- y2l
 
 
-  FL <- read_tsv(FeatureList, show_col_types = FALSE)
+  FL <<- read_tsv(FeatureList, show_col_types = FALSE)
+
   if (!DefaultSizes)
   {
     FeatureListIn <- CreateFL(FL, xSmallSVL, xLargeSVL)

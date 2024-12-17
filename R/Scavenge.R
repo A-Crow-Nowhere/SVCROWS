@@ -582,10 +582,15 @@ BreakPointEndCalc <- function(qEnd, rEndLeft, rEndRight)
 #function to calculate RO bounds/ check if overlap passes a threshold.
 RecpricolOverlapCalc <- function(qStart, rStart, qEnd, rEnd, rIsKnown, qIsKnown, qLength, rLength, rROPcntPass, isHunt, MLposition)
 {
-  if((qStart < rStart && qEnd < rStart) || (qStart > rEnd && qEnd > rEnd))
+  if((qStart < rStart && qEnd < rStart) || (qStart > rEnd && qEnd > rEnd) && !rIsKnown)
   {
     return(FALSE)
   }
+  if((qStart < rStart && qEnd > rStart) && rIsKnown)
+  {
+    return(TRUE)
+  }
+
   #if Query is known and doesnt overlap with a known, automatic fail.
   if(!rIsKnown && qIsKnown)
   {
@@ -977,7 +982,7 @@ PSLprocessing <- function(rPLSin, FCLin)
   for(i in seq_len(nrow(rPLSin)))
   {
     rowindex <- which(FCLin$ID == rPLSin$ROParentID[i])
-    if(suppressWarnings(is.null(rowindex) || length(rowindex) == 0 || is.na(FCLin$ID) || is.na(rPLSin$ROParentID[i])))
+    if(suppressWarnings(is.null(rowindex) || length(rowindex) == 0 || is.na(FCLin$ID[i]) || is.na(rPLSin$ROParentID[i])))
     {
       rPLSin$Rarity[i] <- "Unassigned"
     }
