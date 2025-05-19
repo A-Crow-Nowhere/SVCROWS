@@ -75,9 +75,9 @@ ConsensusToQuery("~/user/R/ConsensusList.tsv", "~/user/R/QueryListOut.tsv")
 ConcatSamples(Indirectory, Outdirectory)
 ```
 
-
-
-
+### Future Updates
+General speed/preformance improvments
+Functions for converting between VCF and SVCROWS input/output formats
 
 
 
@@ -86,9 +86,5 @@ ConcatSamples(Indirectory, Outdirectory)
 ## Acknowledgements
 This work was funded by the NIH: RO1 AI150856
 
-Data was gathered from the European Genome Agency
-
 [Julia Żuławińska](https://www.linkedin.com/in/julia-zulawinska/) for coding support
-
-
 Crows (the animal) in general, for being pretty cool
