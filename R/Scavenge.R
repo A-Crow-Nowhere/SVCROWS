@@ -389,7 +389,7 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
                               PerSampleList[QueryPosition,],
                               qLength, rID, rReads, rScore, qReads, qScore, ConsensusPosition, FALSE)
 
-
+            makeitnegative <- FALSE
 
             if(ExpandRORegion && ROPass)
             {
@@ -876,6 +876,7 @@ AddQuery <- function(isKnown, qLength, qRow)
 # Returns the sizes of the boundries for RO and BP in a list.
 SizeDetermination <- function(size)
 {
+
   #define BP variables in y = mx + B
   BPslope <- (y1LargeBound - y1SmallBound)/(xLargeSVL - xSmallSVL)
   BPintercept <- (y1LargeBound - (xLargeSVL * BPslope))
@@ -1014,6 +1015,7 @@ AdjustPSL <- function(FPSLout)
     i <- 1
     for(i in seq_len(nrow(df)))
     {
+      print(i)
       if (i == nrow(df))
       {
         AFPSL <<- rbind(AFPSL, df)
@@ -1149,11 +1151,6 @@ RunScavenge <- function(file, FeatureListIn, BPfactor, ExpandRORegion)
   OP <- SVCrowsScavenge(QueryListIn, ConsensusListIn, PerSampleIn, BPfactor, ExpandRORegion)
   return(OP)
 }
-
-
-
-
-
 
 
 
