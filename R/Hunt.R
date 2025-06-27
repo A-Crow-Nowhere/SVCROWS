@@ -418,8 +418,16 @@ WriteHunt <- function(OutPuts, name, OutputDirectory)
   write_tsv(FinalPerSampleList, file = FPSLName)
   write_tsv(AdjustedFinalPerSampleList, file = AFPSLName)
 
-  suppressWarnings(rm(list = names(which(!unlist(eapply(.GlobalEnv,
-                                       \(x) inherits(x, what = "function")))))))
+  suppressWarnings(
+  rm(
+    list = names(
+      which(!unlist(
+        eapply(.GlobalEnv, is.function)
+      ))
+    )
+  )
+)
+
 
   print(paste0("Finished processing ",name))
 }
