@@ -150,8 +150,9 @@ SVCrowsHunt <- function(QueryListX, FeatureListX, PerSampleX, BPfactor)
   #Consensus lsit
   for(i in seq_len(nrow(QueryList)))
   {
+    numberof <-  nrow(QueryList)
     QueryPosition <<- i
-    print(paste("hQP: ",QueryPosition))
+    print(paste("Comparing feature: ",QueryPosition, "out of" ,numberof))
 
     #Set variables for convenience
     qChr <- QueryList$Chr[i]

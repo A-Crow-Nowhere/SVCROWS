@@ -171,20 +171,21 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
 {
 
   WorkingCon <<- ConsensusListX
-  QueryList <<- QueryListX
-  PerSampleList <<- PerSampleX
+  QueryList <- QueryListX
+  PerSampleList <- PerSampleX
 
   #first entry in the list is tricky, because its empty. Set this variable TRUE
   #when the list is first empty
-  EmptyList <<- TRUE
+  EmptyList <- TRUE
 
   #Begin Query loop. Each query is assessed only once, Either a match is found
   #and is iterated, or it finds no matches and is added to the end of the
-  #Consensus lsit
+  #Consensus list
   for(i in seq_len(nrow(QueryList)))
   {
-    QueryPosition <<- i
-    print(paste("sQP: ",QueryPosition))
+    numberof <-  nrow(QueryList)
+    QueryPosition <- i
+    print(paste("Comparing feature: ",QueryPosition, "out of" ,numberof))
 
     #Set variables for convenience
     qChr <- QueryList$Chr[i]
@@ -204,25 +205,25 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
     #consensus list entries with a matching breakpoint, but different enough
     #sizes to be called unique, it will only iterate the largest of those
     #entries. When these get called as true, the query can no longer iterate BP.
-    BPStartHasPassed <<- FALSE
-    BPEndHasPassed <<- FALSE
+    BPStartHasPassed <- FALSE
+    BPEndHasPassed <- FALSE
 
     #Stops the Consensus List (CL) while loop. When a match is found, or a query
     #reaches the end of this CL, it will be added, and move on to the next
     #Query
-    QueryAdded <<- FALSE
+    QueryAdded <- FALSE
 
     #add the first query to the CL by default
     if (EmptyList)
     {
-      EmptyList <<- FALSE
+      EmptyList <- FALSE
       rowIn <- AddQuery(qIsKnown, qLength, QueryList[QueryPosition,])
-      WorkingCon <<- rbind(WorkingCon, rowIn)
+      WorkingCon <- rbind(WorkingCon, rowIn)
       suppressWarnings(remove(rowIn))
 
       #temp files are used to not interfere with original files as much as
       #possible
-      tempProw <<- PerSampleList[QueryPosition,]
+      tempProw <- PerSampleList[QueryPosition,]
 
       tempProw$ROParentID[1] <- qID
       tempProw$BPStartParentID[1] <- qID
@@ -230,7 +231,7 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
 
       tempPerSamp <- PerSampleList
       tempPerSamp[QueryPosition,] <- tempProw
-      PerSampleList <<- tempPerSamp
+      PerSampleList <- tempPerSamp
 
       suppressWarnings(remove(tempProw))
     }
@@ -241,7 +242,7 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
       #split the working consensus into entries that match the Chr and Type
       #for speed
       twc <- WorkingCon
-      MatchList <<- twc %>%
+      MatchList <- twc %>%
         filter(
           Chr == qChr,
           Type == qType,
@@ -253,7 +254,7 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
         )
 
       # Filter conditions combined into a single filter function call for MinusMatchList
-      MinusMatchList <<- twc %>%
+      MinusMatchList <- twc %>%
         filter(
           Chr != qChr |
             Type != qType |
@@ -271,35 +272,35 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
 
         tempML <- MatchList
         tempML <- rbind(tempML, rowIn)
-        MatchList <<- tempML
+        MatchList <- tempML
 
-        tempProw <<- PerSampleList[QueryPosition,]
+        tempProw <- PerSampleList[QueryPosition,]
         tempProw$ROParentID[1] <- qID
         tempProw$BPStartParentID[1] <- qID
         tempProw$BPEndParentID[1] <- qID
 
         tempPerSamp <- PerSampleList
         tempPerSamp[QueryPosition,] <- tempProw
-        PerSampleList <<- tempPerSamp
+        PerSampleList <- tempPerSamp
         suppressWarnings(remove(tempProw))
 
         TwC <- ReMergeLists(MatchList, MinusMatchList)
-        WorkingCon <<- TwC
+        WorkingCon <- TwC
 
-        ConsensusPosition <<- 1
+        ConsensusPosition <- 1
       }
 
       #There are matches to assess
       else
       {
         #Index for the CL, not a for loop because it needs to end prematurely.
-        ConsensusPosition <<- 1
+        ConsensusPosition <- 1
         while(!QueryAdded)
         {
           #Set variables for convenience, all of these get passed to subsequent
           #functions. rX stands for 'reference'. Reference is the current CL entry
           #the query is being compared to.
-          rChr <<- MatchList$Chr[ConsensusPosition]
+          rChr <- MatchList$Chr[ConsensusPosition]
           rStart <- MatchList$Start[ConsensusPosition]
           rEnd <- MatchList$End[ConsensusPosition]
           rLength <- MatchList$Length[ConsensusPosition]
@@ -337,7 +338,7 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
 
           #If query has same breakpoint as ref, drop overlap threshold to minimum
           #I.e. Breakpoint consideration
-          TempROPercentPass <<- rROPcntPass
+          TempROPercentPass <- rROPcntPass
           if ((BPStartPass || BPEndPass) && BPfactor)
           {
             rROPcntPass = y2SmallOV
@@ -352,7 +353,7 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
           if (BPStartPass == FALSE && BPEndPass == FALSE && ROPass == FALSE && (ConsensusPosition != nrow(MatchList)))
           {
             tempPos <- ConsensusPosition
-            ConsensusPosition <<- (tempPos + 1)
+            ConsensusPosition <- (tempPos + 1)
           }
 
           #If there is no match, and we are at the end of the list, add the new
@@ -361,9 +362,9 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
           {
 
             rowIn <- AddQuery(qIsKnown, qLength, QueryList[QueryPosition,])
-            MatchList <<- rbind(MatchList, rowIn)
+            MatchList <- rbind(MatchList, rowIn)
 
-            tempProw <<- PerSampleList[QueryPosition,]
+            tempProw <- PerSampleList[QueryPosition,]
 
             tempProw$ROParentID[1] <- qID
             tempProw$BPStartParentID[1] <- qID
@@ -371,13 +372,13 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
 
             tempPerSamp <- PerSampleList
             tempPerSamp[QueryPosition,] <- tempProw
-            PerSampleList <<- tempPerSamp
+            PerSampleList <- tempPerSamp
             suppressWarnings(remove(tempProw))
 
             ReMergeLists(MatchList, MinusMatchList)
 
-            ConsensusPosition <<- 1
-            QueryAdded <<- TRUE
+            ConsensusPosition <- 1
+            QueryAdded <- TRUE
           }
           else
           {
@@ -454,25 +455,25 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
               #Update rows based on results of decision
               tempWorkC <- MatchList
               tempWorkC[ConsensusPosition,] <- rowIn$Crow
-              MatchList <<- tempWorkC
+              MatchList <- tempWorkC
 
               tempPerSamp <- PerSampleList
               tempPerSamp[QueryPosition,] <- rowIn$Prow
-              PerSampleList <<- tempPerSamp
+              PerSampleList <- tempPerSamp
 
 
               #if RO is the thing that passed, this Query is done.
               #Also accepts both BPs matching (RO is iterated in Decision())
               if (ROPass || (BPStartPass && BPEndPass))
               {
-                QueryAdded <<- TRUE
+                QueryAdded <- TRUE
               }
 
               #only the breakpoints passed and not at end, we can continue searching for a match
               else if ((BPStartPass || BPEndPass) && !ROPass && (ConsensusPosition != nrow(MatchList)))
               {
                 tempPos <- ConsensusPosition
-                ConsensusPosition <<- (tempPos + 1)
+                ConsensusPosition <- (tempPos + 1)
               }
 
               #a breakpoint passed and it is the end of the CL, update and then add
@@ -482,9 +483,9 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
 
                 tempML <- MatchList
                 tempML <- rbind(tempML, rowIn)
-                MatchList <<- tempML
+                MatchList <- tempML
 
-                tempProw <<- PerSampleList[QueryPosition,]
+                tempProw <- PerSampleList[QueryPosition,]
 
                 if(BPStartPass)
                 {
@@ -508,12 +509,12 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
 
                 tempPerSamp <- PerSampleList
                 tempPerSamp[QueryPosition,] <- tempProw
-                PerSampleList <<- tempPerSamp
+                PerSampleList <- tempPerSamp
 
                 TwC <- ReMergeLists(MatchList, MinusMatchList)
                 WorkingCon <<- TwC
 
-                QueryAdded <<- TRUE
+                QueryAdded <- TRUE
               }
               suppressWarnings(remove(rowIn, TwC))
             }
@@ -527,9 +528,9 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
   }
 
   print("Done with comparisons, generating outputs")
-  FCLout <<- FCLprocessing(WorkingCon)
-  FPSLout <<- PSLprocessing(PerSampleList, FCLout)
-  AFPSLout <<- AdjustPSL(FPSLout)
+  FCLout <- FCLprocessing(WorkingCon)
+  FPSLout <- PSLprocessing(PerSampleList, FCLout)
+  AFPSLout <- AdjustPSL(FPSLout)
   outs <- list(FCL = FCLout, FPSL = FPSLout, AFPSL = AFPSLout, QL = QueryList)
   return(outs)
 }
@@ -999,48 +1000,35 @@ PSLprocessing <- function(rPLSin, FCLin)
 # If multiple SVs from the same sample match to the same consensus entry, this
 #artificially inflates the count. Ajusted PSL marks repeat matches as "clone"s,
 # will keep the largest SV as the true one.
-AdjustPSL <- function(FPSLout)
-{
-  header <- colnames(FPSLout)
-  AFPSL = data.frame(matrix(nrow = 0, ncol = length(header)))
-  colnames(AFPSL) = header
-
-  splitdata <- split(FPSLout,FPSLout$Var3)
-
-  result <- map(splitdata, function(df)
-  {
-
-    df <- df %>% arrange(desc(abs(Length)))
-
-    i <- 1
-    for(i in seq_len(nrow(df)))
-    {
-      print(i)
-      if (i == nrow(df))
-      {
-        AFPSL <<- rbind(AFPSL, df)
-      }
-      else
-      {
-        j = i + 1
-        while (j <= (nrow(df)))
-        {
-          if (df$ROParentID[i] == df$ROParentID[j] && df$Rarity[j] != "Clone")
-          {
-            df$ROParentID[j] <- (df$ROParentID[j] * -1)
-            df$Rarity[j] <- "Clone"
+AdjustPSL <- function(FPSLout) {
+  result <- FPSLout %>%
+    group_by(Var3) %>%
+    arrange(desc(abs(Length)), .by_group = TRUE) %>%
+    mutate(
+      ROParentID_New = ROParentID,
+      Rarity_New = Rarity
+    ) %>%
+    group_modify(~ {
+      seen_ids <- character()
+      .x <- as.data.frame(.x)  # Just in case it’s a tibble
+      for (i in seq_len(nrow(.x))) {
+        if (.x$Rarity_New[i] != "Clone") {
+          if (.x$ROParentID_New[i] %in% seen_ids) {
+            .x$ROParentID_New[i] <- -.x$ROParentID_New[i]
+            .x$Rarity_New[i] <- "Clone"
+          } else {
+            seen_ids <- c(seen_ids, .x$ROParentID_New[i])
           }
-
-          j = j + 1
         }
       }
-    }
-    return(AFPSL)
-  })
-  return(AFPSL)
+      .x
+    }) %>%
+    ungroup() %>%
+    select(-ROParentID, -Rarity) %>%
+    rename(ROParentID = ROParentID_New, Rarity = Rarity_New)
+
+   return(as.data.frame(result))
 }
-
-
 
 
 #' Run SVCROWS in "Scavenge" mode
@@ -1131,7 +1119,7 @@ WriteScavenge <- function(OutPuts, name, OutputDirectory)
   write_tsv(QueryList, file = QLName)
   write_tsv(FinalConsensusList, file = FCLName)
   write_tsv(FinalPerSampleList, file = FPSLName)
-  write_tsv(AdjustedFinalPerSampleList, file = AFPSLName)
+  write_delim(AdjustedFinalPerSampleList, file = AFPSLName, delim = "\t")
 
  suppressWarnings(
   rm(
