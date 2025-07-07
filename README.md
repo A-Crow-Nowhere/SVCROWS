@@ -47,6 +47,149 @@ During runtime, the user must provide the same 6 variables as in “scavenge” 
 vi)	There are several tools and functions for quantifying the resulting SVRs. Incorporated into the ‘input list’ are the variables “NumReads” and “QScore”, which are added and averaged (respectively) as individual SVs match into their final SVR (see Usage for further functionality). SVCROWS also has a “Summary” function, that will provide summary information of the final SVR output.
 
 
+## Global Setup Instructions for SVCROWS
+
+This guide shows how to install the `SVCROWS` R package and expose its R functions and Bash scripts globally from **any shell or Conda environment**.
+
+---
+
+### 1. Create a Conda Environment
+
+First, create and activate the environment that supports the `SVCROWS` package:
+
+```bash
+# Save this as svcrows-env.yaml
+cat <<EOF > svcrows-env.yaml
+name: svcrows-env
+channels:
+  - conda-forge
+dependencies:
+  - r-base >=4.2,<4.4
+  - r-dplyr
+  - r-purrr
+  - r-tidyverse
+  - r-stringr
+  - r-stringi
+  - r-cli
+  - git
+  - r-devtools
+EOF
+
+# Create and activate the environment
+conda env create -f svcrows-env.yaml
+conda activate svcrows-env
+```
+
+---
+
+### 2. Clone and Install SVCROWS
+
+```bash
+git clone https://github.com/A-Crow-Nowhere/SVCROWS.git
+cd SVCROWS
+
+# Reinstall stringi from source if needed (to fix ICU errors)
+Rscript -e 'install.packages("stringi", type = "source", repos = "https://cloud.r-project.org")'
+
+# Install the package
+Rscript -e 'devtools::install(".")'
+```
+
+---
+
+### 3. Expose SVCROWS Commands Globally
+
+This step creates global shell commands like `scavenge` and `hunt` that work **from any shell or Conda environment** by wrapping R calls via `conda run`.
+
+#### Create `~/bin` if it doesn't exist:
+
+```bash
+mkdir -p ~/bin
+```
+
+Make sure `~/bin` is on your PATH (add this to your `~/.bashrc` or `~/.zshrc` if needed):
+
+```bash
+export PATH="$HOME/bin:$PATH"
+```
+
+Then reload your shell:
+
+```bash
+source ~/.bashrc  # or ~/.zshrc
+```
+
+#### Create wrapper scripts
+
+```bash
+# scavenge wrapper
+cat <<'EOF' > ~/bin/scavenge
+#!/bin/bash
+conda run -n svcrows-env Rscript -e "SVCROWS::Scavenge(commandArgs(trailingOnly = TRUE))" "$@"
+EOF
+chmod +x ~/bin/scavenge
+
+# hunt wrapper
+cat <<'EOF' > ~/bin/hunt
+#!/bin/bash
+conda run -n svcrows-env Rscript -e "SVCROWS::Hunt(commandArgs(trailingOnly = TRUE))" "$@"
+EOF
+chmod +x ~/bin/hunt
+```
+
+Now you can run:
+
+```bash
+scavenge input.vcf output.tsv
+hunt calls.tsv results.tsv
+```
+
+---
+
+### 4. Make Bash Scripts Globally Available
+
+If the repo contains useful bash tools in the `scripts/` directory, you can make them globally executable:
+
+```bash
+# From inside the cloned SVCROWS repo
+cp scripts/*.sh ~/bin/
+chmod +x ~/bin/*.sh
+```
+
+(Optional) Remove `.sh` extensions for cleaner usage:
+
+```bash
+for f in ~/bin/*.sh; do mv "$f" "${f%.sh}"; done
+```
+
+Now you can run those scripts like:
+
+```bash
+yourscriptname input.txt output.txt
+```
+
+---
+
+### Final Test
+
+You should now be able to run all the following **from any location or Conda environment**:
+
+```bash
+scavenge some_file.vcf output.tsv
+hunt other_input.tsv results.tsv
+myscriptname input.txt output.txt
+```
+
+---
+
+Feel free to integrate this into your README or create a separate `INSTALL.md`. Let us know if you'd like to automate this into an `install.sh` script or Conda package!
+
+
+
+
+
+
+
 ## Running
 SVCROWS runs input files from entire directories and writes them into an output directory. The InputQueryList and OutputDirectory must therefore be directories.
 ### "Scavenge" Mode
