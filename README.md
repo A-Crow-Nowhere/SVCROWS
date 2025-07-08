@@ -137,11 +137,11 @@ EOF
 chmod +x ~/bin/hunt
 ```
 
-Now you can run:
+Now you can run from anywhere:
 
 ```bash
-scavenge input.vcf output.tsv
-hunt calls.tsv results.tsv
+scavenge ....
+hunt ....
 ```
 
 ---
@@ -181,8 +181,6 @@ myscriptname input.txt output.txt
 ```
 
 ---
-
-Feel free to integrate this into your README or create a separate `INSTALL.md`. Let us know if you'd like to automate this into an `install.sh` script or Conda package!
 
 
 
