@@ -422,6 +422,12 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
 
 
                 newLength <- rowIn$Crow$Length[1]
+
+    print(isKnown)
+    print(qLength)
+    print(xSmallSVL)
+    print(qRow)
+
                 if (abs(newLength) <= xSmallSVL)
                 {
                   rowIn$Crow$Size[1] <- "Small"
