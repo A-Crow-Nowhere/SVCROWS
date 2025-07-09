@@ -855,6 +855,10 @@ AddQuery <- function(isKnown, qLength, qRow)
 {
   if (abs(qLength) <= xSmallSVL)
   {
+    print(isKnown)
+    print(qLength)
+    print(xSmallSVL)
+    print(qRow)
     sizeCategory <- "Small"
     Sizes <- SizeDetermination(xSmallSVL)
   }
