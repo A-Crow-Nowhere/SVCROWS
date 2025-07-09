@@ -217,6 +217,12 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
     if (EmptyList)
     {
       EmptyList <- FALSE
+
+       print(isKnown)
+       print(qLength)
+       print(xSmallSVL)
+       print(qRow)
+
       rowIn <- AddQuery(qIsKnown, qLength, QueryList[QueryPosition,])
       WorkingCon <- rbind(WorkingCon, rowIn)
       suppressWarnings(remove(rowIn))
