@@ -427,10 +427,7 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
 
                 newLength <- rowIn$Crow$Length[1]
 
-    print(isKnown)
-    print(qLength)
-    print(xSmallSVL)
-    print(qRow)
+
 
                 if (abs(newLength) <= xSmallSVL)
                 {
@@ -865,10 +862,6 @@ AddQuery <- function(isKnown, qLength, qRow)
 {
   if (abs(qLength) <= xSmallSVL)
   {
-    print(isKnown)
-    print(qLength)
-    print(xSmallSVL)
-    print(qRow)
     sizeCategory <- "Small"
     Sizes <- SizeDetermination(xSmallSVL)
   }
@@ -1099,6 +1092,8 @@ Scavenge <- function(InputQueryList, OutputDirectory, ExpandRORegion = FALSE, BP
       xSmallSVL <<- round(as.numeric(quants[2]))
       xLargeSVL <<- round(as.numeric(quants[4]))
 
+      print(xSmallSVL)
+      
       y1SmallBound <<- round(xSmallSVL / 10)
       y1LargeBound <<- round(xLargeSVL / 10)
 
