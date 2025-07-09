@@ -1102,9 +1102,11 @@ Scavenge <- function(InputQueryList, OutputDirectory, ExpandRORegion = FALSE, BP
     first4 <<- substring(filename, 1, 20)
 
     OutPuts <- RunScavenge(file, FeatureListIn, BPfactor, ExpandRORegion)
-
+   print(xSmallSVL)
     WriteScavenge(OutPuts, first4, OutputDirectory)
   }
+
+  
 }
 
 WriteScavenge <- function(OutPuts, name, OutputDirectory)
