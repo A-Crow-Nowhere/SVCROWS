@@ -1067,7 +1067,8 @@ Scavenge <- function(InputQueryList, OutputDirectory, ExpandRORegion = FALSE, BP
   #size cutoffs for CNVs (basepairs)
   xSmallSVL <<- xs
   xLargeSVL <<- xl
-
+  print(xSmallSVL)
+  print(xs)
   #Boundry sizes for overlapping SV start sites.
   #Size of the whole boundry (basepairs)
   y1SmallBound <<- y1s
