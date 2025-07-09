@@ -1091,7 +1091,7 @@ Scavenge <- function(InputQueryList, OutputDirectory, ExpandRORegion = FALSE, BP
       xSmallSVL <<- round(as.numeric(quants[2]))
       xLargeSVL <<- round(as.numeric(quants[4]))
 
-      print(xSmallSVL)
+      print("MOTHER")
       
       y1SmallBound <<- round(xSmallSVL / 10)
       y1LargeBound <<- round(xLargeSVL / 10)
