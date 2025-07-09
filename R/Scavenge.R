@@ -188,18 +188,18 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
     print(paste("Comparing feature: ",QueryPosition, "out of" ,numberof))
 
     #Set variables for convenience
-    qChr <- QueryList$Chr[i]
-    qStart <- QueryList$Start[i]
-    qEnd <- QueryList$End[i]
-    qLength <- QueryList$Length[i]
-    qType <- QueryList$Type[i]
-    qID <- QueryList$ID[i]
-    qV1 <- QueryList$Var1[i]
-    qV2 <- QueryList$Var2[i]
-    qV3 <- QueryList$Var3[i]
-    qIsKnown <- QueryList$IsKnown[i]
-    qScore <- QueryList$QScore[i]
-    qReads <- QueryList$NumReads[i]
+    qChr <<- QueryList$Chr[i]
+    qStart <<- QueryList$Start[i]
+    qEnd <<- QueryList$End[i]
+    qLength <<- QueryList$Length[i]
+    qType <<- QueryList$Type[i]
+    qID <<- QueryList$ID[i]
+    qV1 <<- QueryList$Var1[i]
+    qV2 <<- QueryList$Var2[i]
+    qV3 <<- QueryList$Var3[i]
+    qIsKnown <<- QueryList$IsKnown[i]
+    qScore <<- QueryList$QScore[i]
+    qReads <<- QueryList$NumReads[i]
 
     #Breakpoints (BP) can only iterate once. So if there are multiple
     #consensus list entries with a matching breakpoint, but different enough
@@ -300,31 +300,31 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
           #Set variables for convenience, all of these get passed to subsequent
           #functions. rX stands for 'reference'. Reference is the current CL entry
           #the query is being compared to.
-          rChr <- MatchList$Chr[ConsensusPosition]
-          rStart <- MatchList$Start[ConsensusPosition]
-          rEnd <- MatchList$End[ConsensusPosition]
-          rLength <- MatchList$Length[ConsensusPosition]
-          rType <- MatchList$Type[ConsensusPosition]
-          rID <- MatchList$ID[ConsensusPosition]
-          rV1 <- MatchList$Var1[ConsensusPosition]
-          rV2 <- MatchList$Var2[ConsensusPosition]
-          rV3 <- MatchList$Var3[ConsensusPosition]
-          rIsKnown <- MatchList$IsKnown[ConsensusPosition]
+          rChr <<- MatchList$Chr[ConsensusPosition]
+          rStart <<- MatchList$Start[ConsensusPosition]
+          rEnd <<- MatchList$End[ConsensusPosition]
+          rLength <<- MatchList$Length[ConsensusPosition]
+          rType <<- MatchList$Type[ConsensusPosition]
+          rID <<- MatchList$ID[ConsensusPosition]
+          rV1 <<- MatchList$Var1[ConsensusPosition]
+          rV2 <<- MatchList$Var2[ConsensusPosition]
+          rV3 <<- MatchList$Var3[ConsensusPosition]
+          rIsKnown <<- MatchList$IsKnown[ConsensusPosition]
 
-          rReads <- MatchList$NumReads[ConsensusPosition]
-          rScore <- MatchList$QScore[ConsensusPosition]
+          rReads <<- MatchList$NumReads[ConsensusPosition]
+          rScore <<- MatchList$QScore[ConsensusPosition]
 
-          rROPcntPass <- MatchList$ROPercentPass[ConsensusPosition]
+          rROPcntPass <<- MatchList$ROPercentPass[ConsensusPosition]
 
-          rStartLeft <- MatchList$BPStartLeft[ConsensusPosition]
-          rStartRight <- MatchList$BPStartRight[ConsensusPosition]
-          rEndLeft <- MatchList$BPEndLeft[ConsensusPosition]
-          rEndRight <- MatchList$BPEndRight[ConsensusPosition]
+          rStartLeft <<- MatchList$BPStartLeft[ConsensusPosition]
+          rStartRight <<- MatchList$BPStartRight[ConsensusPosition]
+          rEndLeft <<- MatchList$BPEndLeft[ConsensusPosition]
+          rEndRight <<- MatchList$BPEndRight[ConsensusPosition]
 
           #Reset the variables storing status of a query finding a match to FALSE
           #by default
           #In RO
-          ROPass <- FALSE
+          ROPass <<- FALSE
 
           #In BP
           BPStartPass <- FALSE
