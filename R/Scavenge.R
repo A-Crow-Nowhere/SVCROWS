@@ -185,6 +185,7 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
   {
     numberof <-  nrow(QueryList)
     QueryPosition <- i
+    print(QueryPosition)
     print(paste("Comparing feature: ",QueryPosition, "out of" ,numberof))
 
     #Set variables for convenience
