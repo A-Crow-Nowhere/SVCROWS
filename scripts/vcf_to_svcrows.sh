@@ -59,7 +59,7 @@ awk -v sample_name="$SAMPLE_NAME" -F'\t' 'BEGIN { OFS="\t"; id=1 }
 
     chr = $1
     start = $2
-    end = "."; svlength = "."; svtype = "."; svmethod = "."; mapq = "0"; rereads = "."
+    end = "."; svlength = "."; svtype = "."; svmethod = "."; mapq = "0"; rereads = "0"
 
     # Parse INFO fields and build filtered Var1 (exclude RNAMES)
     n = split(info, info_fields, ";")
