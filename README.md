@@ -124,19 +124,20 @@ source ~/.bashrc  # or ~/.zshrc
 #### Create wrapper scripts
 
 ```bash
-# scavenge wrapper
-cat <<'EOF' > ~/bin/scavenge
-#!/bin/bash
-conda run -n svcrows-env Rscript -e "SVCROWS::Scavenge(commandArgs(trailingOnly = TRUE))" "$@"
-EOF
-chmod +x ~/bin/scavenge
+# run from the repo root
+install -m 0755 scripts/scavenge           ~/bin/scavenge
+install -m 0755 scripts/hunt               ~/bin/hunt
+install -m 0755 scripts/bed_to_vcf.sh      ~/bin/bed_to_vcf.sh
+install -m 0755 scripts/crows_to_vcf.sh    ~/bin/crows_to_vcf.sh
+install -m 0755 scripts/crows_to_bed.sh    ~/bin/crows_to_bed.sh
+install -m 0755 scripts/vcf_to_bed.sh      ~/bin/vcf_to_bed.sh
+install -m 0755 scripts/vcf_to_svcrows.sh  ~/bin/vcf_to_crows.sh
 
-# hunt wrapper
-cat <<'EOF' > ~/bin/hunt
-#!/bin/bash
-conda run -n svcrows-env Rscript -e "SVCROWS::Hunt(commandArgs(trailingOnly = TRUE))" "$@"
-EOF
-chmod +x ~/bin/hunt
+# (optional) ensure ~/bin is on PATH
+case ":$PATH:" in *":$HOME/bin:"*) :;; *) echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc; source ~/.bashrc;; esac
+
+# quick sanity
+command -v scavenge && command -v hunt
 ```
 
 Now you can run from anywhere:
@@ -175,7 +176,7 @@ scavenge input.txt output.txt
 ### Final Test
 
 You should now be able to run all the following **from any location or Conda environment**:
-
+All functions have an embedded help command to instruct usage.
 ```bash
 scavenge some_file.vcf output.tsv
 hunt other_input.tsv results.tsv
@@ -190,7 +191,7 @@ myscriptname input.txt output.txt
 
 
 
-## Running
+## Running in R
 SVCROWS runs input files from entire directories and writes them into an output directory. The InputQueryList and OutputDirectory must therefore be directories.
 ### "Scavenge" Mode
 
