@@ -186,7 +186,7 @@ SVCrowsScavenge <- function(QueryListX, ConsensusListX, PerSampleX, BPfactor, Ex
     numberof <-  nrow(QueryList)
     QueryPosition <- i
     print(paste("Comparing feature: ",QueryPosition, "out of" ,numberof))
-
+   
     
     #Set variables for convenience
     qChr <<- QueryList$Chr[i]
@@ -1067,7 +1067,7 @@ Scavenge <- function(InputQueryList, OutputDirectory, ExpandRORegion = FALSE, BP
   #size cutoffs for CNVs (basepairs)
   xSmallSVL <<- xs
   xLargeSVL <<- xl
-  print(xSmallSVL)
+  print("SMAH")
   print(xs)
   #Boundry sizes for overlapping SV start sites.
   #Size of the whole boundry (basepairs)
@@ -1158,7 +1158,6 @@ RunScavenge <- function(file, FeatureListIn, BPfactor, ExpandRORegion)
   OP <- SVCrowsScavenge(QueryListIn, ConsensusListIn, PerSampleIn, BPfactor, ExpandRORegion)
   return(OP)
 }
-
 
 
 
