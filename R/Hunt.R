@@ -28,7 +28,7 @@
 
 #Generate the featurelist in the internal running format.
 CreateFL <- function(inputlist, xs, xl)
-{
+{ 
   #Column Names for the Consensus list
   print("Generating Feature List...")
   FL_columns <<- c(
@@ -135,7 +135,7 @@ CreateFL <- function(inputlist, xs, xl)
 #Main loop for Hunt mode
 SVCrowsHunt <- function(QueryListX, FeatureListX, PerSampleX, BPfactor)
 {
-
+ 
   #Type safe inputs for tables so nothing gets confused
   WorkingCon <<- FeatureListX
   QueryList <<- QueryListX
@@ -342,7 +342,7 @@ SVCrowsHunt <- function(QueryListX, FeatureListX, PerSampleX, BPfactor)
 #'
 #' @examples Hunt("~/user/R/SVCROWSin", "~/user/R/FeatureList", "~/user/R/SVCROWSout", TRUE, FALSE, 5000, 25000, 500, 2500, 50, 80)
 #' @examples Hunt("~/user/R/SVCROWSin", "~/user/R/FeatureList", "~/user/R/SVCROWSout", TRUE, TRUE)
-Hunt <- function(InputQueryList, FeatureList, OutputDirectory, BPfactor = TRUE, DefaultSizes = FALSE,  xs = NA, xl = NA, y1s = NA, y1l = NA, y2s = NA, y2l = NA)
+Hunt <- function(InputQueryList, FeatureList, OutputDirectory, BPfactor = TRUE, DefaultSizes = TRUE,  xs = NA, xl = NA, y1s = NA, y1l = NA, y2s = NA, y2l = NA)
 {
 
   library(dplyr)
@@ -367,6 +367,7 @@ Hunt <- function(InputQueryList, FeatureList, OutputDirectory, BPfactor = TRUE, 
 
   if (!DefaultSizes)
   {
+  
     FeatureListIn <- CreateFL(FL, xSmallSVL, xLargeSVL)
   }
 
