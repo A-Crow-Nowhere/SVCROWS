@@ -39,7 +39,7 @@ SVCROWS Requires 6 user inputs to define stringency in the matching protocol. Th
   <img src="Images/Functions.png" alt="Options" width="30%">
 </p>
 
-
+<small>
 i)	SVCROWS can generate default values for these 6 parameters based on the first and third quartile of the SV-size distribution of the dataset. It is important to note that using this option will adjust its parameters to each new file in the input directory. However, this is not recommended because it may not tailor the program to user needs. 
 
 ii)	SVCROWS uses breakpoint matching between SVs as a secondary piece of information to determine the similarity between two SVs. The user input determines breakpoint boundary sizes. As potential SVs are compared, the start or end breakpoint must fall within the boundary to be considered a match. Start boundaries cannot match with end boundaries and vice versa. When a breakpoint matches, SVCROWS can interpret this as a high likelihood of a match and adjusts the RO threshold to the minimum value (input 5) provided by the user (green arrows). If potential SVs are already at the minimum, there is no change. Breakpoints matching is counted and recorded on the consensus list only once, to the first match found in the consensus list, but subsequent matches will continue to adjust RO thresholds after it is counted.
@@ -55,7 +55,7 @@ The ‘feature list’ has the same requirements as the ‘input list’ but onl
 During runtime, the user must provide the same 6 variables as in “scavenge” mode, but consider inputs that apply to the characteristics of the desired features themselves, rather than the input SVs. This mode returns similar outputs as the “Scavenge” mode, but the consensus list represents the quantification of each feature given to the program. 
 
 vi)	There are several tools and functions for quantifying the resulting SVRs. Incorporated into the ‘input list’ are the variables “NumReads” and “QScore”, which are added and averaged (respectively) as individual SVs match into their final SVR (see Usage for further functionality). SVCROWS also has a “Summary” function, that will provide summary information of the final SVR output.
-
+</small>
 
 ## Global Setup Instructions for SVCROWS
 
