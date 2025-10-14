@@ -27,11 +27,18 @@ SVCROWS has strict text-based input and output formats. When assessing matching 
 
 SVCROWS Requires 6 user inputs to define stringency in the matching protocol. This creates the SVCROWS algorithm progression. (see publication for full details)
 
-![SVCROWS/Images](Images/AlgorithmProgression.png)
+
+<p align="center">
+  <img src="Images/AlgorithmProgression.png" alt="Algorithm" width="50%">
+</p>
+
 
 ### Functions and Options
 
-![SVCROWS/Images](Images/Functions.png)
+<p align="center">
+  <img src="Images/Functions.png" alt="Options" width="50%">
+</p>
+
 
 i)	SVCROWS can generate default values for these 6 parameters based on the first and third quartile of the SV-size distribution of the dataset. It is important to note that using this option will adjust its parameters to each new file in the input directory. However, this is not recommended because it may not tailor the program to user needs. 
 
