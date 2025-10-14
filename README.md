@@ -6,7 +6,7 @@
 ## Description
 Structural variants (SVs), or large rearrangements of the genome, are prevalent in critical organism phenotypes and human diseases. There are several tools for defining unique SVs across different datasets, however, most fail to delineate SVs in a region that constitute significant biological differences in order to simplify downstream analyses. Further, these tools lack user options to tailor the stringency in those calls specifically for the dataset limitations or genomic background of the study organism. Here we present a user-friendly R-based package, SVCROWS, that provides users options to produce meaningfully different SV regions based on reciprocal overlap dependent on SV size. Further, this program optionally uses break point matching between SVs as a second piece of information to determine if SVs are the same. These, along with other features make SVCROWS a versatile and malleable tool for categorizing SVs.
 
-![SVCROWS Workflow](Images/FigureSimplify.png){ width="60%" }
+![SVCROWS Workflow](Images/FigureSimplify.png){ width="90%" }
 
 ## Instalation in R
 SVCROWS requires several R packages to be manually installed: "dplyr", "tidyverse", and "purrr". 
