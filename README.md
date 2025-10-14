@@ -8,7 +8,7 @@ Structural variants (SVs), or large rearrangements of the genome, are prevalent 
 
 
 <p align="center">
-  <img src="Images/FigureSimplify.png" alt="SVCROWS Workflow" width="70%">
+  <img src="Images/FigureSimplify.png" alt="SVCROWS Workflow" width="50%">
 </p>
 
 ## Instalation in R
