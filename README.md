@@ -29,14 +29,14 @@ SVCROWS Requires 6 user inputs to define stringency in the matching protocol. Th
 
 
 <p align="center">
-  <img src="Images/AlgorithmProgression.png" alt="Algorithm" width="30%">
+  <img src="Images/AlgorithmProgression.png" alt="Algorithm" width="50%">
 </p>
 
 
 ### Functions and Options
 
 <p align="center">
-  <img src="Images/Functions.png" alt="Options" width="30%">
+  <img src="Images/Functions.png" alt="Options" width="50%">
 </p>
 
 <small>
