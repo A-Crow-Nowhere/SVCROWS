@@ -159,30 +159,6 @@ hunt ....
 
 ---
 
-### 4. Make Bash Scripts Globally Available
-
-If the repo contains useful bash tools in the `scripts/` directory, you can make them globally executable:
-
-```bash
-# From inside the cloned SVCROWS repo
-cp scripts/*.sh ~/bin/
-chmod +x ~/bin/*.sh
-```
-
-(Optional) Remove `.sh` extensions for cleaner usage:
-
-```bash
-for f in ~/bin/*.sh; do mv "$f" "${f%.sh}"; done
-```
-
-Now you can run those scripts in the CLI like:
-
-```bash
-scavenge input.txt output.txt
-```
-
----
-
 ### Final Test
 
 You should now be able to run all the following **from any location or Conda environment**:
