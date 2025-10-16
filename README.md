@@ -116,7 +116,7 @@ This step creates global shell commands like `scavenge` and `hunt` that work **f
 
 ```bash
 # Bin is generally where programs go, but you can define any folder (including a subfolder of SVCROWS package) to add to your global path.
-mkdir -p ~/bin
+mkdir -p ~/pathto/bin
 ```
 
 Make sure `~/bin` is on your PATH (add this to your `~/.bashrc` or `~/.zshrc` if needed):
@@ -142,12 +142,6 @@ install -m 0755 scripts/crows_to_vcf.sh    ~/bin/crows_to_vcf.sh
 install -m 0755 scripts/crows_to_bed.sh    ~/bin/crows_to_bed.sh
 install -m 0755 scripts/vcf_to_bed.sh      ~/bin/vcf_to_bed.sh
 install -m 0755 scripts/vcf_to_svcrows.sh  ~/bin/vcf_to_crows.sh
-
-# (optional) ensure ~/bin is on PATH
-case ":$PATH:" in *":$HOME/bin:"*) :;; *) echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc; source ~/.bashrc;; esac
-
-# quick sanity
-command -v scavenge && command -v hunt
 ```
 
 Now you can run from anywhere:
