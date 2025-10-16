@@ -116,7 +116,8 @@ This step creates global shell commands like `scavenge` and `hunt` that work **f
 
 ```bash
 # Bin is generally where programs go, but you can define any folder (including a subfolder of SVCROWS package) to add to your global path.
-mkdir -p ~/pathto/bin
+mkdir -p ~/pathto/bin #The next steps are written so that bin is home-level (i.e. ~/bin/)
+
 ```
 
 Make sure `~/bin` is on your PATH (add this to your `~/.bashrc` or `~/.zshrc` if needed):
